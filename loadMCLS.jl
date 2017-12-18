@@ -14,6 +14,7 @@ function loadMCLS(fname)
     f = zeros(Int, P)
     phi = zeros(Int, P, T)
     p = zeros(Int, P)
+	v = ones(Int, P,T)
 
     i = 1
     j = 1
@@ -56,5 +57,6 @@ function loadMCLS(fname)
         i += 1
     end
     close(file)
-    return D, C, b, h, f, phi, p
+
+    return D, C, b, h, f, phi, p, v
 end

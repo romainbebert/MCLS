@@ -2,7 +2,7 @@ using JuMP, GLPKMathProgInterface
 
 include("setULS.jl")
 
-function bnb(ip, y, bnb_conds, instance)
+function bnbULS(ip, y, bnb_conds, instance)
 
 	valy = getvalue(y)
 	realy = find(!isinteger, valy)
@@ -52,14 +52,14 @@ function bnb(ip, y, bnb_conds, instance)
 			return ip
 		elseif isnan(getobjectivevalue(ip_left)) || status_left == :Infeasible
 			println("LEFT FAILED")
-			return bnb(ip_right, y_right, conds_right, instance)
+			return bnbULS(ip_right, y_right, conds_right, instance)
 		elseif isnan(getobjectivevalue(ip_right)) || status_right == :Infeasible
 			println("RIGHT FAILED")
-			return bnb(ip_left, y_left, conds_left, instance)
+			return bnbULS(ip_left, y_left, conds_left, instance)
 		else
 			println("CONTINUE BOTH")
-			res_left = bnb(ip_left, y_left, conds_left, instance)
-			res_right = bnb(ip_right, y_right, conds_right, instance)
+			res_left = bnbULS(ip_left, y_left, conds_left, instance)
+			res_right = bnbULS(ip_right, y_right, conds_right, instance)
 			return getobjectivevalue(res_left) < getobjectivevalue(res_right) ? res_left : res_right
 		end
 
